@@ -10,7 +10,7 @@ description: 하루 3번(10·14·19시) life.guidejung.com에 key 추천 키워�
 - 키워드: D:/guidejung/key/daily_keywords.py의 life 프로필.
 
 ## 순서
-1. 한국 날짜: `TZ=Asia/Seoul date +%F`. 전날로 소급하지 마세요.
+1. 한국 날짜: `TZ=KST-9 date +%F`. 전날로 소급하지 마세요.
 2. 편수 확인: posts.mjs에서 published가 오늘인 글이 10편 이상이면 쓰지 말고 보고만 하고 끝내세요. 이번 실행은 2편입니다.
 3. 키워드: `python D:/guidejung/key/daily_keywords.py --profile life --skip-if-done`를 실행한 뒤 `D:/guidejung/key/reports/life/<오늘>.json`의 `top`을 위에서부터 봅니다. 아래에 해당하면 건너뛰고 다음 키워드를 봅니다.
    - posts.mjs에 같은 keyword 글이 이미 있음

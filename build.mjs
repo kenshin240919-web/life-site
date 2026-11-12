@@ -9,7 +9,16 @@ const SITE = {
   desc: '세금·금융, 시즌 행사, 살림과 요리, 쇼핑, 여행 정보를 한 번에 정리합니다.',
   email: 'kenshin240919@gmail.com',      // guidejung.com과 같은 문의 주소
   adsense: 'ca-pub-3087515825675332',    // guidejung.com·gov와 같은 게시자 ID
+  // 사용자가 받아 알려 주는 값(빈 값이면 해당 태그를 넣지 않음)
+  ga: '',                                 // Google Analytics 측정 ID 'G-…'
+  clarity: '',                            // Microsoft Clarity 프로젝트 ID
+  verify: {google: '', naver: '', bing: ''},  // google-site-verification / naver-site-verification / msvalidate.01 의 content 값
+  daumPin: '',                            // Daum 웹마스터도구 PIN 한 줄 전체(robots.txt 마지막 줄)
 };
+const track = (SITE.ga ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${SITE.ga}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${SITE.ga}');</script>` : '')
+  + (SITE.clarity ? `<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","${SITE.clarity}");</script>` : '')
+  + Object.entries({'google-site-verification': SITE.verify.google, 'naver-site-verification': SITE.verify.naver, 'msvalidate.01': SITE.verify.bing})
+    .filter(([, v]) => v).map(([k, v]) => `<meta name="${k}" content="${v}">`).join('');
 // [주소용 slug, 이름, 필명, 분류 소개]
 const CATS = [
   ['money', '금융·세금', '돈계산노트', '세금 신고, 공제, 연금, 대출처럼 숫자가 중요한 정보를 공식 기준으로 정리합니다.'],
@@ -62,7 +71,7 @@ function page({title, desc, path, body, head = '', image = '/og.png', type = 'we
   const full = title === SITE.name ? title : `${title} - ${SITE.name}`;
   const on = s => s === cur ? ' aria-current="page"' : '';
   const nav = CATS.map(c => `<a class="k-${c[0]}" href="/c/${c[0]}/"${on(c[0])}>${c[1]}</a>`).join('');
-  return `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  return `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${track}
 <title>${esc(full)}</title><meta name="description" content="${esc(desc)}"><link rel="canonical" href="${url(path)}">
 <meta property="og:site_name" content="${esc(SITE.name)}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="${type}"><meta property="og:url" content="${url(path)}"><meta property="og:image" content="${url(image)}"><meta property="og:locale" content="ko_KR">
@@ -149,7 +158,7 @@ const statics = [
   ['/privacy/', '개인정보 처리방침', '방문자 정보 처리와 광고 쿠키 안내입니다.', `<article class="post"><h1>개인정보 처리방침</h1><p class="meta"><span>시행일 2026.11.13</span></p>
 <h2>1. 수집하는 정보</h2><p>이 사이트는 회원가입, 댓글, 입력 양식이 없어 이름·연락처를 받지 않습니다. 호스팅(GitHub Pages)은 보안과 운영을 위해 접속 IP 등 기록을 처리할 수 있습니다.</p>
 <h2>2. 광고와 쿠키</h2><p>Google 등 제3자 광고 업체는 쿠키를 사용해 이 사이트와 다른 사이트 방문 기록을 바탕으로 광고를 보여 줄 수 있습니다. 맞춤 광고는 <a href="https://adssettings.google.com/" rel="noopener" target="_blank">Google 광고 설정</a>에서 끌 수 있습니다. 자세한 내용은 <a href="https://policies.google.com/technologies/ads?hl=ko" rel="noopener" target="_blank">Google 광고 정책</a>을 확인해 주세요.</p>
-<h2>3. 문의</h2><p>이메일로 문의하시면 답변을 위해 보내신 주소와 내용을 확인합니다. 문의: <a href="mailto:${SITE.email}">${SITE.email}</a></p></article>`],
+${SITE.ga || SITE.clarity ? `<h2>3. 방문 통계</h2><p>방문 현황을 파악하고 화면을 고치기 위해 ${[SITE.ga && 'Google Analytics', SITE.clarity && 'Microsoft Clarity'].filter(Boolean).join('와 ')}를 사용합니다. 이 도구들은 쿠키 등으로 방문 페이지, 이용 기기, 화면 이동 같은 정보를 이름 없이 수집합니다. 브라우저 설정에서 쿠키를 막을 수 있습니다.</p>` : ''}<h2>${SITE.ga || SITE.clarity ? 4 : 3}. 문의</h2><p>이메일로 문의하시면 답변을 위해 보내신 주소와 내용을 확인합니다. 문의: <a href="mailto:${SITE.email}">${SITE.email}</a></p></article>`],
   ['/contact/', '문의', '오류 제보와 문의 방법입니다.', `<article class="post"><h1>문의</h1><p>글의 오류나 바뀐 정보를 알려 주시면 확인 후 고치겠습니다.</p><p>이메일: <a href="mailto:${SITE.email}">${SITE.email}</a></p><p>글 제목이나 주소, 어느 부분이 다른지 함께 적어 주세요. 주민등록번호·계좌번호 같은 개인정보는 보내지 마세요.</p></article>`],
 ];
 for (const [path, title, desc, body] of statics) { write(path, page({title, desc, path, body})); paths.push([path, null]); }
@@ -162,7 +171,7 @@ write('/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="ht
   paths.map(([p, d]) => `<url><loc>${url(p)}</loc>${d ? `<lastmod>${d}</lastmod>` : ''}</url>`).join('')}</urlset>\n`);
 write('/rss.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>${xml(SITE.name)}</title><link>${SITE.origin}/</link><description>${xml(SITE.desc)}</description><language>ko</language><atom:link href="${url('/rss.xml')}" rel="self" type="application/rss+xml"/>${
   sorted.slice(0, 50).map(p => `<item><title>${xml(p.title)}</title><link>${url(postPath(p))}</link><guid isPermaLink="true">${url(postPath(p))}</guid><description>${xml(p.desc)}</description><category>${xml(p.cat)}</category><pubDate>${new Date(p.published + 'T09:00:00+09:00').toUTCString()}</pubDate></item>`).join('')}</channel></rss>\n`);
-write('/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${url('/sitemap.xml')}\n`);
+write('/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${url('/sitemap.xml')}\n${SITE.daumPin ? SITE.daumPin + '\n' : ''}`);
 write('/ads.txt', `google.com, ${SITE.adsense.replace('ca-', '')}, DIRECT, f08c47fec0942fa0\n`);
 write('/CNAME', new URL(SITE.origin).host + '\n');
 write('/.nojekyll', '');

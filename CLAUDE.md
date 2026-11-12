@@ -13,6 +13,7 @@
 - 배포: `main`에 push하면 GitHub Actions(`.github/workflows/pages.yml`)가 빌드해 GitHub Pages로 배포합니다.
 - 도메인: guidejung.com DNS(Cloudflare)의 `life` CNAME → kenshin240919-web.github.io (프록시 끔).
 - 사이트 이름·문의 주소·애드센스 ID·분류·필명은 `build.mjs` 맨 위 `SITE`, `CATS`에 있습니다.
+- 방문 통계·검색엔진 인증: `SITE.ga`(GA4 G-…), `SITE.clarity`, `SITE.verify`(google·naver·bing 메타태그 content), `SITE.daumPin`(robots.txt 마지막 줄). 값을 넣고 빌드·push하면 모든 페이지에 들어가고 개인정보 처리방침에 고지가 붙습니다.
 
 ## 글 형식 (posts.mjs 한 항목)
 - `slug` 영문 소문자·숫자·하이픈, `cat` 분류 6개 중 하나(금융·세금, 시즌·행사, 생활·요리, 쇼핑·할인, 여행·날씨, IT·앱), `keyword` key가 준 메인 키워드

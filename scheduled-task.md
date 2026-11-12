@@ -3,7 +3,7 @@ name: life-daily-post
 description: 하루 3번(10·14·19시) life.guidejung.com에 key 추천 키워드로 글 2편 작성·발행 (GitHub Pages)
 ---
 
-'생활정보가이드 라이프'(https://life.guidejung.com/)에 글 2편을 작성·검증·공개 발행하세요. 사용자는 매 실행마다 별도 확인 없이 글 작성, git commit/push, GitHub Pages 배포, key 기록(--written)을 승인했습니다. 결과는 한국어로 보고하세요.
+'생활정보가이드'(https://life.guidejung.com/)에 글 2편을 작성·검증·공개 발행하세요. 사용자는 매 실행마다 별도 확인 없이 글 작성, git commit/push, GitHub Pages 배포, key 기록(--written)을 승인했습니다. 결과는 한국어로 보고하세요.
 
 ## 환경
 - 저장소: D:/guidejung/life-site (GitHub: kenshin240919-web/life-site, 브랜치 main). 시작할 때 `git pull --ff-only`. 운영 규칙은 저장소의 CLAUDE.md.
@@ -32,4 +32,4 @@ description: 하루 3번(10·14·19시) life.guidejung.com에 key 추천 키워�
 완료하면 글 제목, 분류, 공개 URL, 건너뛴 키워드와 이유, 안티슬롭 적용 여부를 남기세요. 실패하면 멈춘 단계와 원인을 사실대로 보고하세요.
 
 ## 화면 알림
-보고를 쓰기 전에 결과 요약(성공이면 제목 · URL, 실패면 멈춘 단계 · 원인, 200자 안)을 UTF-8 텍스트 파일(스크래치패드)에 쓰고 `powershell -NoProfile -ExecutionPolicy Bypass -File C:\Users\User\.claude\scripts\popup.ps1 -title "생활정보가이드 라이프 발행" -file <그 파일>` 을 실행해 화면에 띄웁니다.
+보고를 쓰기 전에 결과 요약(성공이면 제목 · URL, 실패면 멈춘 단계 · 원인, 200자 안)을 UTF-8 텍스트 파일(스크래치패드)에 쓰고 `powershell -NoProfile -ExecutionPolicy Bypass -File C:\Users\User\.claude\scripts\popup.ps1 -title "생활정보가이드 발행" -file <그 파일>` 을 실행해 화면에 띄웁니다.

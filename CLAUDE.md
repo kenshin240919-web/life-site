@@ -1,4 +1,4 @@
-# life.guidejung.com (생활정보가이드 라이프) 운영 안내
+# life.guidejung.com (생활정보가이드) 운영 안내
 
 이 폴더는 https://life.guidejung.com 의 소스입니다. 세금·금융, 시즌 행사, 살림·요리, 쇼핑, 여행, 앱 사용법을 게시판형 목록으로 보여 주는 정적 사이트입니다. guideruri.com(`D:\guidejung\key\digital-guide-site`)과 같은 방식으로 운영합니다.
 

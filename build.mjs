@@ -10,8 +10,8 @@ const SITE = {
   email: 'kenshin240919@gmail.com',      // guidejung.com과 같은 문의 주소
   adsense: 'ca-pub-3087515825675332',    // guidejung.com·gov와 같은 게시자 ID
   // 사용자가 받아 알려 주는 값(빈 값이면 해당 태그를 넣지 않음)
-  ga: '',                                 // Google Analytics 측정 ID 'G-…'
-  clarity: '',                            // Microsoft Clarity 프로젝트 ID
+  ga: 'G-5QJSBNJ6EB',                               // Google Analytics 측정 ID 'G-…'
+  clarity: 'zcs3mr1qj2',                          // Microsoft Clarity 프로젝트 ID
   verify: {google: '', naver: '', bing: ''},  // google-site-verification / naver-site-verification / msvalidate.01 의 content 값
   daumPin: '',                            // Daum 웹마스터도구 PIN 한 줄 전체(robots.txt 마지막 줄)
 };

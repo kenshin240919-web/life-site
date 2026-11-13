@@ -12,8 +12,8 @@ const SITE = {
   // 사용자가 받아 알려 주는 값(빈 값이면 해당 태그를 넣지 않음)
   ga: 'G-5QJSBNJ6EB',                               // Google Analytics 측정 ID 'G-…'
   clarity: 'zcs3mr1qj2',                          // Microsoft Clarity 프로젝트 ID
-  verify: {google: '', naver: '', bing: ''},  // google-site-verification / naver-site-verification / msvalidate.01 의 content 값
-  daumPin: '',                            // Daum 웹마스터도구 PIN 한 줄 전체(robots.txt 마지막 줄)
+  verify: {google: '', naver: '0a479b4be0d00884c9c51668da2cc478543667a2', bing: '94FB5F5FCBAB10DABDC0256A035F8369'},  // google-site-verification / naver-site-verification / msvalidate.01 의 content 값
+  daumPin: '#DaumWebMasterTool:d4d67b8442cceb9a55243de52d2c0933b9ab426835d105085e9ef5608ef7b813:LJPampnqaffzNtkuALZiYQ==',                            // Daum 웹마스터도구 PIN 한 줄 전체(robots.txt 마지막 줄)
 };
 const track = (SITE.ga ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${SITE.ga}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${SITE.ga}');</script>` : '')
   + (SITE.clarity ? `<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","${SITE.clarity}");</script>` : '')

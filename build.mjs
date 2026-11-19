@@ -9,6 +9,7 @@ const SITE = {
   desc: '세금·금융, 시즌 행사, 살림과 요리, 쇼핑, 여행 정보를 한 번에 정리합니다.',
   email: 'kenshin240919@gmail.com',      // guidejung.com과 같은 문의 주소
   adsense: 'ca-pub-3087515825675332',    // guidejung.com·gov와 같은 게시자 ID
+  adSlot: '6639512269',                  // 글 본문 수동 광고 칸(첫 문단 뒤·중간 소제목 앞·마지막 소제목 앞)
   // 사용자가 받아 알려 주는 값(빈 값이면 해당 태그를 넣지 않음)
   ga: 'G-5QJSBNJ6EB',                               // Google Analytics 측정 ID 'G-…'
   clarity: 'zcs3mr1qj2',                          // Microsoft Clarity 프로젝트 ID
@@ -77,7 +78,7 @@ function page({title, desc, path, body, head = '', image = '/og.png', type = 'we
 <meta property="og:type" content="${type}"><meta property="og:url" content="${url(path)}"><meta property="og:image" content="${url(image)}"><meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css">
 <link rel="alternate" type="application/rss+xml" title="${esc(SITE.name)}" href="${url('/rss.xml')}">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.adsense}" crossorigin="anonymous"></script>${head}</head>
+<script>if(location.hostname==='life.guidejung.com'){const s=document.createElement('script');s.async=true;s.crossOrigin='anonymous';s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.adsense}';document.head.appendChild(s)}</script>${head}</head>
 <body><a class="skip" href="#main">본문으로 바로가기</a><header><div class="wrap top"><a class="brand" href="/"><img src="/favicon.svg" alt="" width="30" height="30">${esc(SITE.name)}</a>
 <form class="search" action="https://www.google.com/search" role="search"><input type="hidden" name="as_sitesearch" value="life.guidejung.com"><label class="sr" for="q">사이트 검색</label><input id="q" name="q" type="search" placeholder="검색"><button>검색</button></form></div>
 </header><nav class="gnb" aria-label="분류"><div class="wrap"><a href="/"${on('all')}>전체</a>${nav}</div></nav>
@@ -120,13 +121,26 @@ listing('/', SITE.name, SITE.desc, `<section class="hello"><h1>${esc(SITE.name)}
 for (const [slug, name, , intro] of CATS)
   listing(`/c/${slug}/`, name, intro, `<div class="cat-head k-${slug}"><h1>${name}</h1><p class="intro">${intro}</p></div>`, sorted.filter(p => p.cat === name));
 
+
+// ---------- 본문 수동 광고 칸 ----------
+// 첫 문단 뒤 1개 + 본문 1,500자 이상이면 중간·마지막 소제목 앞. 바로 앞 단락이 표로 끝나는 자리는 피함.
+const ad = `<div class="ad"><ins class="adsbygoogle" style="display:block" data-ad-client="${SITE.adsense}" data-ad-slot="${SITE.adSlot}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div>`;
+function adSpots(p) {
+  const len = (p.lead + p.sections.map(s => s[1]).join('') + p.faq.flat().join('')).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').length;
+  if (len < 1500) return new Set();
+  const ok = i => i > 0 && i < p.sections.length && !/<\/table>\s*$/.test(p.sections[i - 1][1]);
+  const near = want => [0, -1, 1, -2, 2].map(d => want + d).find(ok);
+  const last = near(p.sections.length - 1), mid = near(Math.floor(p.sections.length / 2));
+  return new Set([mid, last].filter(i => i !== undefined));
+}
+
 // ---------- 글 ----------
 sorted.forEach((p, i) => {
   const [cslug, , author] = cat(p.cat);
   const path = postPath(p), modified = p.modified || p.published;
   const related = [...sorted.filter(q => q !== p && q.keyword === p.keyword), ...sorted.filter(q => q !== p && q.cat === p.cat && q.keyword !== p.keyword)].slice(0, 6);
   const newer = sorted[i - 1], older = sorted[i + 1];
-  const image = p.image || '/og.png';
+  const image = p.image || '/og.png', spots = adSpots(p);
   const article = {'@context': 'https://schema.org', '@type': 'Article', headline: p.title, description: p.desc,
     datePublished: p.published, dateModified: modified, image: url(image), mainEntityOfPage: url(path),
     author: {'@type': 'Person', name: author}, publisher: {'@type': 'Organization', name: SITE.name, url: SITE.origin}};
@@ -136,7 +150,8 @@ sorted.forEach((p, i) => {
 <h1>${esc(p.title)}</h1><p class="meta"><span>${author}</span><span>등록 ${dot(p.published)}</span>${modified !== p.published ? `<span>수정 ${dot(modified)}</span>` : ''}</p>
 ${p.image ? `<img class="hero" src="${p.image}" alt="${esc(p.imageAlt || p.title)}" width="1200" height="630">` : ''}
 <p class="lead">${p.lead}</p>
-${p.sections.map(([h, html]) => `<h2>${esc(h)}</h2>${html.replace(/<table/g, '<div class="tbl"><table').replace(/<\/table>/g, '</table></div>')}`).join('\n')}
+${ad}
+${p.sections.map(([h, html], si) => `${spots.has(si) ? ad + '\n' : ''}<h2>${esc(h)}</h2>${html.replace(/<table/g, '<div class="tbl"><table').replace(/<\/table>/g, '</table></div>')}`).join('\n')}
 <h2>자주 묻는 질문</h2>${p.faq.map(([q, a]) => `<details class="faq" open><summary>${esc(q)}</summary><p>${a}</p></details>`).join('')}
 ${p.sources?.length ? `<h2>참고한 공식 자료</h2><ul class="sources">${p.sources.map(([n, u]) => `<li><a href="${esc(u)}" rel="nofollow noopener" target="_blank">${esc(n)}</a></li>`).join('')}</ul>` : ''}
 <p class="note">이 글은 ${dot(modified)} 기준으로 정리했습니다. 금액·기준·일정은 바뀔 수 있으니 신청이나 결정 전에 공식 자료를 다시 확인해 주세요.</p>

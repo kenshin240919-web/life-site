@@ -27,5 +27,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+      # 업로드 직후 아티팩트 목록 반영이 늦어 deploy-pages가 못 찾는 경우 대비 (2026-11-25)
+      - run: sleep 30
       - id: deployment
         uses: actions/deploy-pages@v4
